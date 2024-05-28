@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 const database = require('./models/database') 
+const router = require('./routes/userRoutes');
 
 // Middleware
 // Ambil data dari client yang dikirim dalam bentuk json
@@ -18,6 +19,8 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
+
+app.use(router)
 
 app.listen(8000, () => {
     console.log(`Server has been running on http://localhost:8000`);

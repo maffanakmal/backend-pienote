@@ -1,5 +1,5 @@
 const createUserValidation = {
-    name: {
+    full_name: {
         notEmpty: {
             errorMessage: "Must be not empty",
         },

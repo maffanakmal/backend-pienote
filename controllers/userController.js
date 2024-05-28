@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const getAllUsers = async (req, res) => {
     try {
         const [results] = await database.query(`SELECT * FROM users`);
-        if (Array.isArray(results) && results.length === 0) {
+        if (Array.isArray(results) && results.length < 0) {
             return res.json({
                 users: [],
             });
@@ -24,7 +24,8 @@ const getAllUsers = async (req, res) => {
 
 // Register new user
 const registerNewUser = async (req, res) => {
-    const { fullName, email, phoneNumber, password } = req.body;
+    console.log(req.body); // Log the request body to check the received data
+    const { full_name, email, phone_number, password } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,7 +40,7 @@ const registerNewUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password.toString(), salt);
         const [result] = await database.query(
             `INSERT INTO users (full_name, email, phone_number, password) VALUES (?, ?, ?, ?)`,
-            [fullName, email, phoneNumber, hashedPassword]
+            [full_name, email, phone_number, hashedPassword]
         );
 
         if (result.affectedRows > 0) {
@@ -54,6 +55,7 @@ const registerNewUser = async (req, res) => {
         });
     }
 };
+
 
 module.exports = {
     getAllUsers,

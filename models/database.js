@@ -28,7 +28,6 @@ async function testConnection() {
     try {
         const connection = await database.getConnection();
         console.log('Connected to database...');
-        connection.release();
     } catch (error) {
         console.error(`Connection to database failed: ${error.message}`);
     }
