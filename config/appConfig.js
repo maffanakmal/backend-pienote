@@ -6,7 +6,7 @@ const PORT = process.env.PORT ?? 8000;
 
 // DATABASE
 const DB_HOST = process.env.DATABASE_HOST ?? "localhost";
-const DB_PORT = process.env.DATABASE_PORT ?? 3306;
+const DB_PORT = process.env.DATABASE_PORT ?? 7882;
 const DB_USER = process.env.DATABASE_USER ?? "root";
 const DB_PASSWORD = process.env.DATABASE_PASSWORD ?? "";
 const DB_NAME = process.env.DATABASE_NAME ?? "pienote";

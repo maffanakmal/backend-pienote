@@ -7,7 +7,7 @@ const {
     DB_NAME,
 } = require("../config/appConfig");
 
-// Create the connection pool. The pool-specific settings are the defaults
+// Create the connection pool with the configuration
 const database = mysql.createPool({
     host: DB_HOST,
     port: DB_PORT,
@@ -16,16 +16,25 @@ const database = mysql.createPool({
     database: DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
-    maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+    maxIdle: 10,
+    idleTimeout: 60000,
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
 });
 
-database
-    .getConnection()
-    .then(() => console.log(`Connected to database`))
-    .catch((err) => console.error(`Connection to database failed ${err}`));
+// Function to test the connection
+async function testConnection() {
+    try {
+        const connection = await database.getConnection();
+        console.log('Connected to database...');
+        connection.release();
+    } catch (error) {
+        console.error(`Connection to database failed: ${error.message}`);
+    }
+}
+
+// Test the connection when the module is loaded
+testConnection();
 
 module.exports = database;
