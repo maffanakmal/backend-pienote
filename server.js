@@ -1,27 +1,36 @@
-const express = require('express');
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-
+const express = require("express");
 const app = express();
-
-const database = require('./models/database') 
-const router = require('./routes/userRoutes');
+const errorHandler = require("./middleware/errorHandler");
+const logger = require("./middleware/logger");
+const userRoutes = require("./routes/userRoutes");
+const { BASE_URL, PORT } = require("./config/appConfig");
+const authRoutes = require("./routes/authRoutes");
+const authMiddleware = require("./middleware/authMiddleware");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Middleware
-// Ambil data dari client yang dikirim dalam bentuk json
-app.use(express.json());
-// Menangani data dari client atau browser
-app.use(express.urlencoded({ extended: true }));
-
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
 
 app.use(cookieParser());
 
-app.use(router)
+// Ambil data dari client yang dikirim dalam bentuk json
+app.use(express.json());
+// Menangani data dari client atau browser
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(8000, () => {
-    console.log(`Server has been running on http://localhost:8000`);
-});
+// Menangani log
+app.use(logger);
+
+// Controller untuk validasi user
+app.use(authRoutes);
+
+// HANYA USER YANG LOGIN BISA CRUD data users
+app.use("/api/users", authMiddleware, userRoutes);
+
+// Menangani error
+app.use(errorHandler);
+
+app.listen(PORT, () => console.log(`Server is running on ${BASE_URL}:${PORT}`));

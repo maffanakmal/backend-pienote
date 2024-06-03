@@ -1,4 +1,4 @@
-const createUserValidation = {
+const registerValidation = {
     full_name: {
         notEmpty: {
             errorMessage: "Must be not empty",
@@ -11,18 +11,30 @@ const createUserValidation = {
             errorMessage: "At least must be 3-255 Characters",
         },
     },
-    email: {
+    username: {
         notEmpty: {
             errorMessage: "Must be not empty",
         },
-        isEmail: {
-            errorMessage: "Must be valid email",
+        isLength: {
+            options: {
+                min: 5,
+                max: 255,
+            },
+            errorMessage: "At least must be 3-255 Characters",
+        },
+    },
+    email: {
+        notEmpty: {
+            errorMessage: "Must be not empty",
         },
         isLength: {
             options: {
                 max: 255,
             },
-            errorMessage: "Email not more than 320 characters",
+            errorMessage: "Email not more than 255 Characters",
+        },
+        isEmail: {
+            errorMessage: "Must be valid email",
         },
     },
     phone_number: {
@@ -33,7 +45,7 @@ const createUserValidation = {
             options: {
                 max: 20,
             },
-            errorMessage: "At least 6-128 characters",
+            errorMessage: "At least must be 6-128 Characters",
         },
     },
     password: {
@@ -45,9 +57,9 @@ const createUserValidation = {
                 min: 5,
                 max: 128,
             },
-            errorMessage: "At least 6-128 characters",
+            errorMessage: "At least must be 6-128 Characters",
         },
     },
-};
+}
 
-module.exports = createUserValidation;
+module.exports = registerValidation

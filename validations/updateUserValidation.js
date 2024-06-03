@@ -1,4 +1,6 @@
-const createUserValidation = {
+const { phone_number } = require("./createUserValidation");
+
+const updateUserValidation = {
     full_name: {
         notEmpty: {
             errorMessage: "Must be not empty",
@@ -25,6 +27,7 @@ const createUserValidation = {
             errorMessage: "Email not more than 320 characters",
         },
     },
+    
     phone_number: {
         notEmpty: {
             errorMessage: "Must be not empty",
@@ -42,7 +45,7 @@ const createUserValidation = {
         },
         isLength: {
             options: {
-                min: 5,
+                min: 6,
                 max: 128,
             },
             errorMessage: "At least 6-128 characters",
@@ -50,4 +53,4 @@ const createUserValidation = {
     },
 };
 
-module.exports = createUserValidation;
+module.exports = updateUserValidation;
