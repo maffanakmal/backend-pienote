@@ -1,9 +1,9 @@
 const { checkSchema } = require('express-validator');
 
 const loginValidation = checkSchema({
-    identifier: {
+    authIdentifier: {
         notEmpty: {
-            errorMessage: 'Identifier must not be empty',
+            errorMessage: 'authIdentifier must not be empty',
         },
         custom: {
             options: (value) => {

@@ -60,6 +60,18 @@ const registerValidation = {
             errorMessage: "At least must be 6-128 Characters",
         },
     },
+    confirm_pass: {
+        notEmpty: {
+            errorMessage: "Must be not empty",
+        },
+        isLength: {
+            options: {
+                min: 5,
+                max: 128,
+            },
+            errorMessage: "At least must be 6-128 Characters",
+        },
+    },
 }
 
 module.exports = registerValidation

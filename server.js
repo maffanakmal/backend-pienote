@@ -5,13 +5,13 @@ const logger = require("./middleware/logger");
 const userRoutes = require("./routes/userRoutes");
 const { BASE_URL, PORT } = require("./config/appConfig");
 const authRoutes = require("./routes/authRoutes");
-const authMiddleware = require("./middleware/authMiddleware");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 // Middleware
 app.use(cors({
     origin: 'http://localhost:5173',
+    credentials: true
 }));
 
 app.use(cookieParser());
@@ -28,7 +28,7 @@ app.use(logger);
 app.use(authRoutes);
 
 // HANYA USER YANG LOGIN BISA CRUD data users
-app.use("/api/users", authMiddleware, userRoutes);
+// app.use(userRoutes);
 
 // Menangani error
 app.use(errorHandler);

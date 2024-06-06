@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const database = require("../models/database");
-const { SECRET, REFRESH } = require("../config/appConfig");
+const { SECRET } = require("../config/appConfig");
 
 
 async function register(req, res) {
@@ -17,7 +17,7 @@ async function register(req, res) {
     }
 
     if (password !== confirm_pass) {
-        return res.status(400).json({ message: "Password and Confirm Password do not match!" });
+        return res.status(400).json({ error: "Password and Confirm Password do not match!" });
     }
 
     try {
@@ -61,17 +61,17 @@ async function login(req, res) {
         });
     }
 
-    const { identifier, password } = req.body;
+    const { authIdentifier, password } = req.body;
 
     try {
         // Query to find user by either email or username
         const [users] = await database.query(
             `SELECT * FROM users WHERE email = ? OR username = ?`,
-            [identifier, identifier]
+            [authIdentifier, authIdentifier]
         );
 
         if (users.length === 0) {
-            return res.status(400).json({ error: "Email or Username Not Found!" });
+            return res.status(400).json({ error: "Email or Username Incorrect!" });
         }
 
         const user = users[0];
@@ -90,26 +90,15 @@ async function login(req, res) {
 
         // Create JWT tokens
         const accessToken = jwt.sign({ userId, userName, userEmail }, SECRET, {
-            expiresIn: "20s",
+            expiresIn: "1d",
             algorithm: "HS256",
         });
 
-        const refreshToken = jwt.sign({ userId, userName, userEmail }, REFRESH, {
-            expiresIn: "24h",
-            algorithm: "HS256",
-        });
-
-        // Update the refresh token in the database
-        await database.query(
-            `UPDATE users SET refresh_token = ? WHERE user_id = ?`,
-            [refreshToken, userId]
-        );
-
-        // Set refresh token in cookie
-        res.cookie("refreshToken", refreshToken, { 
+        // Set access token in cookie
+        res.cookie("accessToken", accessToken, { 
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-            secure: process.env.NODE_ENV === "production" // Set to true in production
+            maxAge: 60 * 60 * 1000, // 1 hour
+            secure: process.env.NODE_ENV === "production", // Set to true in production
         });
 
         // Send response with access token
@@ -124,42 +113,26 @@ async function login(req, res) {
 
 async function logout(req, res) {
     try {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) {
-            return res.status(204).json({
-                error: "No refresh token"
+        const accessToken = req.cookies.accessToken;
+        if (!accessToken) {
+            return res.status(401).json({
+                error: "No refresh token provided"
             });
         }
-
-        const [results] = await database.query(`SELECT * FROM users WHERE refresh_token = ?`, [refreshToken]);
-        if (results.length === 0) {
-            return res.status(204).json({
-                error: "Invalid refresh token"
-            });
-        }
-
-        const user = results[0];
-        const userId = user.user_id;
-
-        // Update the refresh_token to null
-        await database.query(
-            `UPDATE users SET refresh_token = NULL WHERE user_id = ?`,
-            [userId]
-        );
-
         // Clear the refresh token cookie
-        res.clearCookie("refreshToken");
+        res.clearCookie("accessToken");
 
         res.status(200).json({
-            message: "Logged out"
+            message: "Logged out successfully"
         });
     } catch (error) {
         console.error("Logout error:", error); // Log the error
         res.status(500).json({
-            error: "Internal Server Error!"
+            error: "Internal Server Error"
         });
     }
 }
+
 
 module.exports = {
     register,
