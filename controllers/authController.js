@@ -94,6 +94,11 @@ async function login(req, res) {
             algorithm: "HS256",
         });
 
+        await database.query(
+            `UPDATE users SET access_token = ? WHERE user_id = ?`,
+            [accessToken, userId]
+        );
+
         // Set access token in cookie
         res.cookie("accessToken", accessToken, { 
             httpOnly: true,
@@ -104,6 +109,7 @@ async function login(req, res) {
         // Send response with access token
         res.json({
             accessToken,
+            userId
         });
     } catch (error) {
         console.error("Login error:", error); // Log the error
@@ -115,11 +121,28 @@ async function logout(req, res) {
     try {
         const accessToken = req.cookies.accessToken;
         if (!accessToken) {
-            return res.status(401).json({
-                error: "No refresh token provided"
+            return res.status(204).json({
+                error: "No access token provided"
             });
         }
-        // Clear the refresh token cookie
+
+        const [results] = await database.query(`SELECT * FROM users WHERE access_token = ?`, [accessToken]);
+        if (results.length === 0) {
+            return res.status(204).json({
+                error: "Invalid access token"
+            });
+        }
+
+        const user = results[0];
+        const userId = user.user_id;
+
+        // Update the access_token to null
+        await database.query(
+            `UPDATE users SET access_token = NULL WHERE user_id = ?`,
+            [userId]
+        );
+
+        // Clear the access token cookie
         res.clearCookie("accessToken");
 
         res.status(200).json({
@@ -128,7 +151,7 @@ async function logout(req, res) {
     } catch (error) {
         console.error("Logout error:", error); // Log the error
         res.status(500).json({
-            error: "Internal Server Error"
+            error: "Internal Server Error!"
         });
     }
 }

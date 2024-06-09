@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const errorHandler = require("./middleware/errorHandler");
 const logger = require("./middleware/logger");
-const userRoutes = require("./routes/userRoutes");
+const catatanKeuanganRoutes = require("./routes/catatanKeuanganRoutes");
 const { BASE_URL, PORT } = require("./config/appConfig");
 const authRoutes = require("./routes/authRoutes");
 const cors = require("cors");
@@ -28,7 +28,7 @@ app.use(logger);
 app.use(authRoutes);
 
 // HANYA USER YANG LOGIN BISA CRUD data users
-// app.use(userRoutes);
+app.use(catatanKeuanganRoutes);
 
 // Menangani error
 app.use(errorHandler);

@@ -4,8 +4,7 @@ const database = require("../models/database");
 
 const authMiddleware = async (req, res, next) => {
     // Extract token from request headers
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = req.cookies.accessToken;
 
     if (!token) {
         return res.status(401).json({ message: "Unauthorized: Token missing" });
@@ -24,7 +23,6 @@ const authMiddleware = async (req, res, next) => {
 
         const user = users[0];
 
-        req.email = user.email;
         req.user = user; // Assuming you might need the user object later
 
         // Proceed to the next route or middleware

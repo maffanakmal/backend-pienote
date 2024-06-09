@@ -13,7 +13,7 @@ Content-Type: application/json
     "confirm_pass": "123456"
 }
 
-###
+### login
 POST http://localhost:8000/login
 Content-Type: application/json
 
@@ -21,6 +21,24 @@ Content-Type: application/json
     "authIdentifier": "hayley15",
     "password": "123456"
 }
+
+### create pemasukan
+POST http://localhost:8000/catatankeuangan/pemasukan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxNzczMjMxOCwiZXhwIjoxNzE3ODE4NzE4fQ.Ws2jMDt41LOqQ_3275zrt1sV1L6BxEPVCx1NhwKZ8-c
+
+{
+    "amount": 100000,
+    "income_category": "transfer",
+    "description": "transfer dari affan beli bakso",
+    "date": "2024/06/07"
+}
+
+###
+GET  http://localhost:8000/catatankeuangan/pemasukan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxNzczMjMxOCwiZXhwIjoxNzE3ODE4NzE4fQ.Ws2jMDt41LOqQ_3275zrt1sV1L6BxEPVCx1NhwKZ8-c
+
 
 ###
 DELETE  http://localhost:8000/logout

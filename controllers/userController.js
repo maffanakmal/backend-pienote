@@ -1,21 +1,20 @@
-const database = require("../models/database");
+const database = require("../model/database");
 const { validationResult } = require("express-validator");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
-// Get all users
 const getAllUsers = async (req, res) => {
     try {
         const [results] = await database.query(`SELECT * FROM users`);
-        if (Array.isArray(results) && results.length < 0) {
-            return res.json({
+        if (Array.isArray(results) && results.length < 0)
+            res.json({
                 users: [],
             });
-        }
         res.json({
             users: results,
         });
     } catch (error) {
         console.log(error);
+
         res.status(500).json({
             error: "Error getting users data",
         });
@@ -23,15 +22,15 @@ const getAllUsers = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-    const { user_id } = req.params;
-    if (!user_id) {
+    const { id } = req.params;
+    if (!id) {
         return res.status(400).json({
             error: "Silahkan isi field id user!",
         });
     }
     try {
-        const [results] = await database.query(`SELECT * FROM users WHERE user_id = ?`, [
-            user_id,
+        const [results] = await database.query(`SELECT * FROM users WHERE id = ?`, [
+            id,
         ]);
         if (Array.isArray(results) && results.length < 0)
             res.json({
@@ -50,7 +49,7 @@ const getUserById = async (req, res) => {
 };
 
 const createNewUser = async (req, res) => {
-    const { full_name, email, phone_number, password } = req.body;
+    const { name, email, password } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty())
@@ -59,11 +58,22 @@ const createNewUser = async (req, res) => {
             errors: errors.array(),
         });
     try {
+        // CHECK APAKAH USER UDAH DI DATABASE
+        const [user] = await database.query(
+            `SELECT  email FROM users WHERE email = ?`,
+            [email]
+        );
+
+        if (user.length > 0)
+            return res.json({
+                error: "Use another email!",
+            });
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const [result] = await database.query(
-            `INSERT INTO users (full_name, email, phone_number, password) VALUES (?, ?, ?, ?)`,
-            [full_name, email, phone_number, hashedPassword]
+            `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
+            [name, email, hashedPassword]
         );
 
         if (result.affectedRows > 0)
@@ -80,9 +90,9 @@ const createNewUser = async (req, res) => {
 };
 
 const updateUserById = async (req, res) => {
-    const { user_id } = req.params;
-    const { full_name, email, phone_number, password } = req.body;
-    if (!user_id) {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+    if (!id) {
         return res.status(400).json({
             error: "Silahkan isi field ID",
         });
@@ -99,8 +109,8 @@ const updateUserById = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const [result] = await database.query(
-            `UPDATE users SET full_name = ?, email = ?, phone_number = ?, password = ? WHERE user_id = ?`,
-            [full_name, email, phone_number, hashedPassword, user_id]
+            `UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?`,
+            [name, email, hashedPassword, id]
         );
         if (result.affectedRows > 0)
             return res.json({ message: "User data updated!" });
@@ -113,29 +123,29 @@ const updateUserById = async (req, res) => {
 };
 
 const deleteUserById = async (req, res) => {
-    const { user_id } = req.params;
-    if (!user_id) {
+    const { id } = req.params;
+    if (!id) {
         return res.status(400).json({
             error: "Silahkan isi field id user!",
         });
     }
     try {
-        const [result] = await database.query(`DELETE FROM users WHERE user_id = ?`, [
-            user_id,
+        const [result] = await database.query(`DELETE FROM users WHERE id = ?`, [
+            id,
         ]);
 
         if (result.affectedRows > 0)
             return res.json({
-                message: `User has been DELETED with ID ${user_id}`,
+                message: `User has been DELETED with ID ${id}`,
             });
 
         return res.status(500).json({
-            error: `Error deleting data ${user_id}`,
+            error: `Error deleting data ${id}`,
         });
     } catch (error) {
-        console.log(`Error while deleting user with ${user_id}`);
+        console.log(`Error while deleting user with ${id}`);
         return res.status(500).json({
-            error: `Error while deleting user with ${user_id}`,
+            error: `Error while deleting user with ${id}`,
         });
     }
 };
@@ -145,5 +155,5 @@ module.exports = {
     getUserById,
     updateUserById,
     deleteUserById,
-    createNewUser
+    createNewUser,
 };
