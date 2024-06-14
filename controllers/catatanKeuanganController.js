@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
 const getPemasukanById = async (req, res) => {
-    const user_id = req.user.user_id; // Assuming req.user is set by the auth middleware
+    const user_id = req.user.user_id;
 
     try {
         const [results] = await database.query(`SELECT * FROM income_notes WHERE user_id = ?`, [user_id]);
@@ -108,9 +108,29 @@ const createNewPengeluaran = async (req, res) => {
     }
 };
 
+const getLaporanKeuangan = async (req, res) => {
+    const user_id = req.user.user_id;
+
+    try {
+        const [pemasukanResults] = await database.query(`SELECT * FROM income_notes WHERE user_id = ?`, [user_id]);
+        const [pengeluaranResults] = await database.query(`SELECT * FROM expense_notes WHERE user_id = ?`, [user_id]);
+
+        res.json({
+            pemasukan: pemasukanResults.length > 0 ? pemasukanResults : [],
+            pengeluaran: pengeluaranResults.length > 0 ? pengeluaranResults : [],
+        });
+    } catch (error) {
+        console.error("Error getting laporan keuangan data by user ID:", error);
+        res.status(500).json({
+            error: "Internal Server Error while getting laporan keuangan data",
+        });
+    }
+};
+
 module.exports = {
     getPemasukanById,
     createNewPemasukan,
     getPengeluaranById,
     createNewPengeluaran,
+    getLaporanKeuangan,
 };

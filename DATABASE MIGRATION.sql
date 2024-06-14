@@ -1,14 +1,35 @@
 CREATE TABLE pienote
 USE pienote
 
-CREATE TABLE Users (
+CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     full_name VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
     password VARCHAR(100) NOT NULL,
+    access_token VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE expense_notes (
+    expense_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    amount decimal(10,2) NOT NULL,
+    expense_category VARCHAR(100) NOT NULL,
+    description text NOT NULL,
+    date datetime NOT NULL,
+);
+
+CREATE TABLE income_notes (
+    income_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    amount decimal(10,2) NOT NULL,
+    income_category VARCHAR(100) NOT NULL,
+    description text NOT NULL,
+    date datetime NOT NULL,
+);
+
 
 CREATE TABLE Transactions (
     transaction_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -40,14 +61,7 @@ CREATE TABLE Wishlists (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
-CREATE TABLE SplitBills (
-    bill_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    total_amount DECIMAL(10, 2) NOT NULL,
-    description TEXT,
-    date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
-);
+
 
 CREATE TABLE SplitBillDetails (
     detail_id INT PRIMARY KEY AUTO_INCREMENT,

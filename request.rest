@@ -22,10 +22,47 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### create bil
+POST http://localhost:8000/berbagitagihan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI5NjQzNywiZXhwIjoxNzE4MzgyODM3fQ.x37V6YC5YCo00QPYUpbe-vKvDNvohjTE6KYNpOvS8RE
+
+{
+    "bill_name": "jajan di gacoan",
+    "friends": ["jidan26", "john123"]
+}
+
+### create item
+POST http://localhost:8000/berbagitagihan/9/items
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODM3NDY4NiwiZXhwIjoxNzE4NDYxMDg2fQ.-ogJiXnL0npDzIXUHToRHRUcfuvM1ffBxI4fZlGMWko
+
+{
+    "item_name": "Mie Ayam",
+    "amount": 2,
+    "price": 10000,
+    "sub_total": 20000,
+    "user_id": 14,
+    "image_path": "document/c"
+}
+
+### create get bil
+GET http://localhost:8000/berbagitagihan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI5Mzc5OCwiZXhwIjoxNzE4MzgwMTk4fQ.dm6Sb3TwEyOIrThYadT7wp5uvmni5BbHQZipOQQWT7Q
+
+
+### upload receipt
+POST http://localhost:8000/berbagitagihan/1/upload
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI1MzA1MSwiZXhwIjoxNzE4MzM5NDUxfQ.VAhf8hNNd6U5_a1YQc8sCyy3Mrcoq41YXtMJjNqOa88
+
+
+
 ### create pemasukan
 POST http://localhost:8000/catatankeuangan/pemasukan
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxNzczMjMxOCwiZXhwIjoxNzE3ODE4NzE4fQ.Ws2jMDt41LOqQ_3275zrt1sV1L6BxEPVCx1NhwKZ8-c
+Authorization: Bearer 
 
 {
     "amount": 100000,
