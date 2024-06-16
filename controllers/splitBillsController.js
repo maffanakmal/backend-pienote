@@ -85,34 +85,47 @@ const createBill = async (req, res) => {
 
 
 const addItemToBill = async (req, res) => {
-    const { bill_id } = req.params; // Extract bill_id from URL params
-    const { item_name, amount, price, sub_total, image_path, user_id } = req.body;
+    const { billId } = req.params;
+    const { items } = req.body;
 
-    // Log the received data for debugging
-    console.log("Received bill_id from params:", bill_id);
-    console.log("Received data from body:", req.body);
+    // Logging to verify item data and billId
+    console.log(`Adding item to billId: ${billId}`);
+    console.log(`Item details:`, items);
 
-    // Validation check
-    if (!bill_id || !item_name || !amount || !price || !sub_total || !image_path || !user_id) {
-        console.log("Missing required fields");
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    // Database insertion logic
     try {
-        const [result] = await database.query(
-            `INSERT INTO items (bill_id, item_name, amount, price, sub_total, image_path, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [bill_id, item_name, amount, price, sub_total, image_path, user_id]
-        );
+        for (const item of items) {
+            const { item_name, amount, price, sub_total, username, image_path } = item;
 
-        if (result.affectedRows > 0) {
-            return res.json({ message: "Item added to bill successfully!" });
+            
+
+            // Check if user exists based on username
+            const [user] = await database.query(`SELECT user_id FROM users WHERE username = ?`, [username]);
+            if (!user) {
+                return res.status(400).json({ error: `User with username ${username} does not exist` });
+            }
+
+            const user_id = user.user_id;
+
+            // Proceed with insertion into items table
+            const [result] = await database.query(
+                `INSERT INTO items (bill_id, item_name, amount, price, sub_total, image_path, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [billId, item_name, amount, price, sub_total, image_path, user_id]
+            );
+
+            if (result.affectedRows > 0) {
+                // Item successfully added
+                setSuccess('Item added to bill successfully!');
+                setShow(true);
+                setTimeout(() => setShow(false), 4000);
+            } else {
+                return res.status(500).json({ error: 'Failed to add item to bill' });
+            }
         }
 
-        return res.status(500).json({ error: "Failed to add item to bill" });
+        res.json({ message: 'All items added to bill successfully' });
     } catch (error) {
         console.error("Error while adding item to bill:", error);
-        return res.status(500).json({ error: "Internal Server Error while adding item to bill" });
+        return res.status(500).json({ error: 'Internal Server Error while adding item to bill' });
     }
 };
 
@@ -168,7 +181,7 @@ const uploadImage = async (req, res) => {
             return res.status(400).json({ error: "No file uploaded" });
         }
 
-        const imagePath = req.file.path.replace('public/', '');
+        const imagePath = req.file.path.replace('public/images', '');
         const { bill_id } = req.params;
         const user_id = req.user.user_id; // Assuming user_id is available in req.user
 

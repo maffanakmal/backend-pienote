@@ -47,9 +47,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZ
 }
 
 ### create get bil
-GET http://localhost:8000/berbagitagihan
+GET http://localhost:8000/berbagitagihan/9
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI5Mzc5OCwiZXhwIjoxNzE4MzgwMTk4fQ.dm6Sb3TwEyOIrThYadT7wp5uvmni5BbHQZipOQQWT7Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODM3NDY4NiwiZXhwIjoxNzE4NDYxMDg2fQ.-ogJiXnL0npDzIXUHToRHRUcfuvM1ffBxI4fZlGMWko
 
 
 ### upload receipt
@@ -57,6 +57,22 @@ POST http://localhost:8000/berbagitagihan/1/upload
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI1MzA1MSwiZXhwIjoxNzE4MzM5NDUxfQ.VAhf8hNNd6U5_a1YQc8sCyy3Mrcoq41YXtMJjNqOa88
 
+
+
+### create tabungan pribadi
+POST http://localhost:8000/tabunganpribadi
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODUxMzQ1NywiZXhwIjoxNzE4NTk5ODU3fQ.I_RvhQhqPNXxTVERAcg5OPkGoKjHLPNrSTjwE8aSlWQ
+
+{
+    "saving_name": "beli mainan",
+    "description": "untuk hadiah ulang tahun",
+    "target": 200000,
+    "place_saving": "bank BCA",
+    "dateline": "2024/06/23",
+    "notification": "Hari",
+    "wishlist": 1
+}
 
 
 ### create pemasukan

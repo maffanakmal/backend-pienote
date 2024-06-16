@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const errorHandler = require("./middleware/errorHandler");
 const logger = require("./middleware/logger");
+const catatanTabunganRoutes = require("./routes/catatanTabunganRoutes");
 const catatanKeuanganRoutes = require("./routes/catatanKeuanganRoutes");
 const splitBillsRoutes = require("./routes/splitBillsRoutes");
-const { BASE_URL, PORT } = require("./config/appConfig");
+const profileRoute = require("./routes/profileRoutes");
 const authRoutes = require("./routes/authRoutes");
+const { BASE_URL, PORT } = require("./config/appConfig");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -28,7 +30,11 @@ app.use(logger);
 // Controller untuk validasi user
 app.use(authRoutes);
 
+app.use(profileRoute);
+
 // HANYA USER YANG LOGIN BISA CRUD data users
+app.use(catatanTabunganRoutes);
+
 app.use(catatanKeuanganRoutes);
 
 app.use(splitBillsRoutes);

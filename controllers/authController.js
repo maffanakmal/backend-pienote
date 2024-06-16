@@ -4,6 +4,32 @@ const { validationResult } = require("express-validator");
 const database = require("../models/database");
 const { SECRET } = require("../config/appConfig");
 
+const getUserById = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            error: "Silahkan isi field id user!",
+        });
+    }
+    try {
+        const [results] = await database.query(`SELECT * FROM users WHERE id = ?`, [
+            id,
+        ]);
+        if (Array.isArray(results) && results.length < 0)
+            res.json({
+                users: [],
+            });
+        res.json({
+            users: results,
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error getting user data by ID",
+        });
+    }
+};
 
 async function register(req, res) {
     const { full_name, username, email, phone_number, password, confirm_pass } = req.body;
@@ -158,6 +184,7 @@ async function logout(req, res) {
 
 
 module.exports = {
+    getUserById,
     register,
     login,
     logout
