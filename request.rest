@@ -25,7 +25,7 @@ Content-Type: application/json
 ### create bil
 POST http://localhost:8000/berbagitagihan
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODI5NjQzNywiZXhwIjoxNzE4MzgyODM3fQ.x37V6YC5YCo00QPYUpbe-vKvDNvohjTE6KYNpOvS8RE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODc3MDgxOCwiZXhwIjoxNzE4ODU3MjE4fQ.eRg5dnDKx4V-pisI11YWXPkvpN61r19rA0TMv38xcM8
 
 {
     "bill_name": "jajan di gacoan",
@@ -62,14 +62,40 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZ
 ### create tabungan pribadi
 POST http://localhost:8000/tabunganpribadi
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxODUxMzQ1NywiZXhwIjoxNzE4NTk5ODU3fQ.I_RvhQhqPNXxTVERAcg5OPkGoKjHLPNrSTjwE8aSlWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxOTg4Njc0NCwiZXhwIjoxNzE5OTczMTQ0fQ.JVR6z8opouspTdrHo5Ur7ZizyKZfZO2BRYde41jYBME
 
 {
     "saving_name": "beli mainan",
     "description": "untuk hadiah ulang tahun",
     "target": 200000,
     "place_saving": "bank BCA",
-    "dateline": "2024/06/23",
+    "dateline": "2024/07/02",
+    "notification": "Hari",
+    "wishlist": 0
+}
+
+### add current savings
+POST http://localhost:8000/detailtabunganpribadi/7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxOTg5MDQ4OSwiZXhwIjoxNzE5OTc2ODg5fQ.Py_mSxk0V5mLc7CYQcvtzIrNe21B2ufdXARtuHzP9VM
+
+{
+    "add_current_saving": 10000,
+    "date": "2024/07/02",
+}
+
+### create tabungan bersama
+POST http://localhost:8000/tabunganbersama
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxOTg4NzU4MywiZXhwIjoxNzE5OTczOTgzfQ.LQSsKHNpLgbSkgr6R9Ygx41FmWFmQe9-0NlK8LCkDng
+
+{
+    "saving_name": "beli mainan",
+    "description": "untuk hadiah ulang tahun",
+    "target": 200000,
+    "place_saving": "bank BCA",
+    "dateline": "2024/07/02",
+    "friends": ["jidan26", "john123"],
     "notification": "Hari",
     "wishlist": 1
 }

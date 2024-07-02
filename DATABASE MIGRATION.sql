@@ -1,74 +1,103 @@
-CREATE TABLE pienote
-USE pienote
-
 CREATE TABLE users (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
-    full_name VARCHAR(100) NOT NULL,
-    username VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
-    password VARCHAR(100) NOT NULL,
-    access_token VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100),
+    username VARCHAR(100),
+    email VARCHAR(100),
+    phone_number VARCHAR(20),
+    password VARCHAR(100),
+    access_token VARCHAR(255),
+    created_at DATETIME
+);
+
+CREATE TABLE bills (
+    bill_id INT AUTO_INCREMENT PRIMARY KEY,
+    bill_name VARCHAR(100),
+    user_id INT,
+    created_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    bill_id INT,
+    item_name VARCHAR(100),
+    amount INT,
+    price DECIMAL(10, 2),
+    sub_total DECIMAL(10, 2),
+    image_path VARCHAR(255),
+    user_id INT,
+    created_at TIMESTAMP,
+    FOREIGN KEY (bill_id) REFERENCES bills(bill_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE bill_friends (
+    billfriend_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    bill_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (bill_id) REFERENCES bills(bill_id)
 );
 
 CREATE TABLE expense_notes (
-    expense_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    amount decimal(10,2) NOT NULL,
-    expense_category VARCHAR(100) NOT NULL,
-    description text NOT NULL,
-    date datetime NOT NULL,
+    expense_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    amount DECIMAL(10, 2),
+    expense_category VARCHAR(100),
+    description TEXT,
+    date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE income_notes (
-    income_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    amount decimal(10,2) NOT NULL,
-    income_category VARCHAR(100) NOT NULL,
-    description text NOT NULL,
-    date datetime NOT NULL,
-);
-
-
-CREATE TABLE Transactions (
-    transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    income_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    type ENUM('income', 'expense') NOT NULL,
-    category VARCHAR(50) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
+    amount DECIMAL(10, 2),
+    income_category VARCHAR(100),
     description TEXT,
-    date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE Savings (
-    saving_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE personal_savings (
+    personalsaving_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    goal_name VARCHAR(100) NOT NULL,
-    target_amount DECIMAL(10, 2) NOT NULL,
-    current_amount DECIMAL(10, 2) DEFAULT 0.00,
-    due_date DATE,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    saving_name VARCHAR(100),
+    description TEXT,
+    target DECIMAL(10, 2),
+    place_saving VARCHAR(100),
+    dateline DATE,
+    notification ENUM('Hari', 'Minggu', 'Bulan'),
+    wishlist TINYINT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE Wishlists (
-    wishlist_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE group_savings (
+    groupsavings_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    item_name VARCHAR(100) NOT NULL,
-    estimated_cost DECIMAL(10, 2),
-    priority ENUM('low', 'medium', 'high'),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    saving_name VARCHAR(100),
+    description TEXT,
+    target DECIMAL(10, 2),
+    place VARCHAR(100),
+    dateline DATE,
+    notification VARCHAR(25),
+    wishlist VARCHAR(25),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE saving_friends (
+    savingfriend_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    groupsavings_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (groupsavings_id) REFERENCES group_savings(groupsavings_id)
+);
 
-
-CREATE TABLE SplitBillDetails (
-    detail_id INT PRIMARY KEY AUTO_INCREMENT,
-    bill_id INT,
-    participant_id INT,
-    amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (bill_id) REFERENCES SplitBills(bill_id),
-    FOREIGN KEY (participant_id) REFERENCES Users(user_id)
+CREATE TABLE personal_current_savings (
+    personalcurrentsaving_id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    add_current_saving DECIMAL(10,2) NOT NULL,
+    date DATETIME NOT NULL,
+    groupsavings_id INT(11),
+    FOREIGN KEY (groupsavings_id) REFERENCES group_savings(groupsavings_id)
 );
 

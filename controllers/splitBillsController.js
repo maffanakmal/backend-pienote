@@ -9,8 +9,9 @@ const createBill = async (req, res) => {
     // Validation check
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.error("Validation errors:", errors.array());
         return res.status(400).json({
-            message: "Bad request create billl",
+            message: "Bad request create bill",
             errors: errors.array(),
         });
     }
@@ -20,60 +21,59 @@ const createBill = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        let bill_id; // Define bill_id variable
-
-        // Insert the new bill into the 'bills' table
+        console.log("Inserting new bill into bills table...");
         const [result] = await connection.query(
             `INSERT INTO bills (bill_name, user_id) VALUES (?, ?)`,
             [bill_name, user_id]
         );
 
-        if (result.affectedRows > 0) {
-            bill_id = result.insertId; // Assign insertId to bill_id
-
-            // Check if all friend usernames exist in the users table
-            if (friends && friends.length > 0) {
-                // Fetch user IDs for the given usernames
-                const [existingFriends] = await connection.query(
-                    'SELECT user_id, username FROM users WHERE username IN (?)',
-                    [friends]
-                );
-
-                const existingFriendIDs = existingFriends.map(friend => friend.user_id);
-                const existingFriendUsernames = existingFriends.map(friend => friend.username);
-
-                // Check if all usernames were found
-                const notFoundUsernames = friends.filter(friend => !existingFriendUsernames.includes(friend));
-                if (notFoundUsernames.length > 0) {
-                    await connection.rollback();
-                    return res.status(400).json({ error: `User(s) not found: ${notFoundUsernames.join(', ')}` });
-                }
-
-                // Map usernames to user IDs for insertion into 'friends' table
-                const friendValues = friends.map(username => {
-                    const friend = existingFriends.find(f => f.username === username);
-                    return [bill_id, friend.user_id];
-                });
-
-                // Insert friends into the 'friends' table
-                if (friendValues.length > 0) {
-                    await connection.query(
-                        `INSERT INTO friends (bill_id, user_id) VALUES ?`,
-                        [friendValues]
-                    );
-                }
-            }
-
-            await connection.commit();
-            return res.json({ message: "New bill created!", bill_id });
-        } else {
+        if (result.affectedRows === 0) {
+            console.error("Failed to insert new bill");
             await connection.rollback();
             return res.status(500).json({ error: "Failed to create new bill" });
         }
 
+        const bill_id = result.insertId;
+        console.log("Bill created with ID:", bill_id);
+
+        if (friends && friends.length > 0) {
+            console.log("Checking if all friend usernames exist...");
+            const [existingFriends] = await connection.query(
+                'SELECT user_id, username FROM users WHERE username IN (?)',
+                [friends]
+            );
+
+            const existingFriendIDs = existingFriends.map(friend => friend.user_id);
+            const existingFriendUsernames = existingFriends.map(friend => friend.username);
+
+            const notFoundUsernames = friends.filter(friend => !existingFriendUsernames.includes(friend));
+            if (notFoundUsernames.length > 0) {
+                console.error("User(s) not found:", notFoundUsernames.join(', '));
+                await connection.rollback();
+                return res.status(400).json({ error: `User(s) not found: ${notFoundUsernames.join(', ')}` });
+            }
+
+            console.log("Mapping usernames to user IDs...");
+            const friendValues = friends.map(username => {
+                const friend = existingFriends.find(f => f.username === username);
+                return [bill_id, friend.user_id];
+            });
+
+            if (friendValues.length > 0) {
+                console.log("Inserting friends into bill_friends table...");
+                await connection.query(
+                    `INSERT INTO bill_friends (bill_id, user_id) VALUES ?`,
+                    [friendValues]
+                );
+            }
+        }
+
+        await connection.commit();
+        console.log("New bill created successfully");
+        return res.json({ message: "New bill created!", bill_id });
     } catch (error) {
         await connection.rollback();
-        console.error("Error while creating new bill:", error.message, error.stack);
+        console.error("Error while creating new bill:", error);
         return res.status(500).json({
             error: "Internal Server Error while creating new bill",
             details: error.message,
@@ -82,6 +82,7 @@ const createBill = async (req, res) => {
         connection.release();
     }
 };
+
 
 
 const addItemToBill = async (req, res) => {
