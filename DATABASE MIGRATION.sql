@@ -1,5 +1,5 @@
 -- Create the database
-CREATE DATABASE pienote;
+CREATE SCHEMA pienote;
 
 -- Use the created database
 USE pienote;
@@ -126,3 +126,7 @@ CREATE TABLE saving_friends (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (groupsavings_id) REFERENCES group_savings(groupsavings_id)
 );
+
+-- Insert sample data into the pienote_users table
+INSERT INTO users (full_name, username, email, phone_number, password, access_token, created_at) VALUES
+('Admin', 'admin', 'admin@example.com', '1234567890', 'admin123', 'token12345', NOW()),

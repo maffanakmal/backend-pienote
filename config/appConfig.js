@@ -2,7 +2,7 @@ require("dotenv").config();
 
 // APP
 const BASE_URL = process.env.BASE_URL ?? "localhost";
-const PORT = process.env.PORT ?? 8000;
+const PORT = process.env.PORT ?? 8001;
 
 // DATABASE
 const DB_HOST = process.env.DATABASE_HOST ?? "localhost";
