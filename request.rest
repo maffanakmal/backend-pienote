@@ -74,15 +74,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZ
     "wishlist": 0
 }
 
-### add current savings
-POST http://localhost:8000/detailtabunganpribadi/7
+### get current savings
+GET http://localhost:8000/catatantabungan
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcxOTg5MDQ4OSwiZXhwIjoxNzE5OTc2ODg5fQ.Py_mSxk0V5mLc7CYQcvtzIrNe21B2ufdXARtuHzP9VM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcyMDAxNzMyOCwiZXhwIjoxNzIwMTAzNzI4fQ.vv6oIMP_8yvHuo5Gm6S0XOorfLTQ2Zv_qtHLp5JCptE
+
+
+### add current savings
+POST http://localhost:8000/detailtabunganpribadi/8/currentsavings
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcyMDAxNzMyOCwiZXhwIjoxNzIwMTAzNzI4fQ.vv6oIMP_8yvHuo5Gm6S0XOorfLTQ2Zv_qtHLp5JCptE
 
 {
     "add_current_saving": 10000,
-    "date": "2024/07/02",
+    "date": "2024-07-02"
 }
+
+### get current savings
+GET http://localhost:8000/detailtabunganpribadi/8/currentsavings
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsLmNvbSIsImlhdCI6MTcyMDAxNzMyOCwiZXhwIjoxNzIwMTAzNzI4fQ.vv6oIMP_8yvHuo5Gm6S0XOorfLTQ2Zv_qtHLp5JCptE
 
 ### create tabungan bersama
 POST http://localhost:8000/tabunganbersama
@@ -100,6 +111,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZ
     "wishlist": 1
 }
 
+### get tabungan bersama
+GET http://localhost:8000/catatantabungan/bersama
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcyMDE4OTc4MiwiZXhwIjoxNzIwMjc2MTgyfQ.wVr8_urCp335W5dQc81cKkgyLOnQ6IAehZ4AH8DrFYY
+
+### get tabungan bersama detail
+GET http://localhost:8000/detailtabunganbersama/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoiSGF5bGV5IFdpbGxpYW1zIiwidXNlckVtYWlsIjoiaGF5bGV5QGdtYWlsLmNvbSIsImlhdCI6MTcyMDI0NTgxNywiZXhwIjoxNzIwMzMyMjE3fQ.r8C6VBD7Z_8G8-2hJj5KQPutBZQzbDa1VsiGkMjNyMY
 
 ### create pemasukan
 POST http://localhost:8000/catatankeuangan/pemasukan
